@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# Get all active IPv4 addresses
-ip_addresses=$(ip -4 addr show | grep inet | awk '{print $2}' | cut -d '/' -f1)
+# Get the list of network interfaces
+interfaces=$(ip -4 addr show | awk '/inet / {print $NF}')
 
-# Display the IPv4 addresses
-echo "Active IPv4 Addresses:"
-for ip in $ip_addresses; do
-  echo "$ip"
+# Iterate over each network interface
+for interface in $interfaces; do
+  # Get the IPv4 address for the interface
+  ip=$(ip -4 addr show dev $interface | awk '/inet / {print $2}')
+  echo "$interface: $ip"
 done
