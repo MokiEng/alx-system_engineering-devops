@@ -1,0 +1,7 @@
+# SSH configuration file for the local SSH client,and
+#  connect to a server without typing a password,
+
+Host *
+     SendEnv LANG LC_*
+     PasswordAuthentication no
+     IdentifyFile ~/.ssh/school
