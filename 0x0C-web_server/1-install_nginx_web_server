@@ -3,7 +3,7 @@
 #write a Bash script that configures a new Ubuntu machine
 #+ to respect above requirements.
 
-apt-get update
+apt-get -y update
 apt-get install -y nginx
 ufw allow 'Nginx HTTP'
 
