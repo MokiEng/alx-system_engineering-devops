@@ -4,7 +4,8 @@
 #+ to respect above requirements.
 
 apt-get -y update
-apt-get install -y nginx
+apt-get -y install nginx
+service nginx start
 ufw allow 'Nginx HTTP'
 
 # Configure Nginx
