@@ -1,24 +1,8 @@
 #!/usr/bin/env bash
-#Install nginx web server
-#write a Bash script that configures a new Ubuntu machine
-#+ to respect above requirements.
+# installs nginx and configures it on a remote server
 
-apt-get update
+apt-get -y update
 apt-get -y install nginx
 ufw allow 'Nginx HTTP'
-# Configure Nginx
-cat > /etc/nginx/sites-available/default <<EOF
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html index.htm;
-
-    location / {
-        return 200 "Hello World!\n";
-    }
-}
-EOF
-# Restart Nginx
-service nginx restart
+echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+service nginx start
