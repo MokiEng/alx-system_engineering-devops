@@ -23,8 +23,6 @@ SERVER_CONFIG=\
 	}
 }"
 
-# Test Nginx configuration
-nginx -t
 if [ "$(pgrep -c nginx)" -le 0 ]; then
 	service nginx start
 # Restart Nginx service to apply the changes
