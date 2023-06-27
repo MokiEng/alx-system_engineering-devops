@@ -5,6 +5,7 @@
 
 apt-get -y update
 apt-get -y install nginx
+ufw allow 'Nginx HTTP'
 # Configure Nginx
 cat > /etc/nginx/sites-available/default <<EOF
 server {
