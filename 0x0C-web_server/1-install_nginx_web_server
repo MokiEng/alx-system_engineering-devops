@@ -3,7 +3,7 @@
 #write a Bash script that configures a new Ubuntu machine
 #+ to respect above requirements.
 
-apt-get -y update
+apt-get update
 apt-get -y install nginx
 ufw allow 'Nginx HTTP'
 # Configure Nginx
@@ -20,6 +20,5 @@ server {
     }
 }
 EOF
-
 # Restart Nginx
 service nginx restart
