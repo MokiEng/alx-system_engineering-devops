@@ -1,34 +1,25 @@
-# Install Nginx package
-package { 'nginx':
-  ensure => installed,
+# puppet manifest creating a custom HTTP header response
+
+exec {'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+  before   => Exec['install Nginx'],
 }
 
-# Create Nginx configuration file
-file { '/etc/nginx/sites-available/default':
-  ensure  => present,
-  content => '
-    server {
-        listen 80 default_server;
-        server_name _;
-        location / {
-            add_header X-Served-By $hostname;
-            # Your site configuration goes here
-        }
-    }
-  ',
-  require => Package['nginx'],
+exec {'install Nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
+  before   => Exec['add_header'],
 }
 
-# Create a symbolic link to enable the site
-file { '/etc/nginx/sites-enabled/default':
-  ensure  => link,
-  target  => '/etc/nginx/sites-available/default',
-  require => File['/etc/nginx/sites-available/default'],
+exec { 'add_header':
+  provider    => shell,
+  environment => ["HOST=${hostname}"],
+  command     => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOST\";/" /etc/nginx/nginx.conf',
+  before      => Exec['restart Nginx'],
 }
 
-# Restart Nginx after making changes
-service { 'nginx':
-  ensure  => running,
-  enable  => true,
-  require => File['/etc/nginx/sites-enabled/default'],
+exec { 'restart Nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
 }
