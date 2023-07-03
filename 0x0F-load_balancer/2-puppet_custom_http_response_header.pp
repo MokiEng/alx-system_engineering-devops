@@ -12,6 +12,7 @@ exec {'install Nginx':
   before   => Exec['add_header'],
 }
 
+# Define the custom HTTP header name and value
 exec { 'add_header':
   provider    => shell,
   environment => ["HOST=${hostname}"],
@@ -19,6 +20,7 @@ exec { 'add_header':
   before      => Exec['restart Nginx'],
 }
 
+#Restart Nginx
 exec { 'restart Nginx':
   provider => shell,
   command  => 'sudo service nginx restart',
