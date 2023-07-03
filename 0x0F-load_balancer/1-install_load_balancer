@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 #Install and configure HAproxy on your lb-01 server.
 
-apt-get -y install software-properties-common
-add-apt-repository -y ppa:vbernat/haproxy-1.8
-apt-get -y update
-apt-get -y install haproxy=1.8.\*
-sed -i '/errorfile 504/a listen thelaura' /etc/haproxy/haproxy.cfg
-sed -i '/listen thelaura/a         bind :80' /etc/haproxy/haproxy.cfg
-sed -i '/bind :80/a         mode http' /etc/haproxy/haproxy.cfg
-sed -i '/mode http/a         server 207828-web-01 34.234.204.250 check' /etc/haproxy/haproxy.cfg
-sed -i '/server 207828-web-01 34.234.204.250 check/a         server 207828-web-02 54.197.49.59 check' /etc/haproxy/haproxy.cfg
-sed -i '/#EXTRAOPTS="-de -m 16"/a ENABLED=1' /etc/default/haproxy
-service haproxy start
+# Update package lists and install HAProxy
+sudo apt update
+sudo apt install -y haproxy
+
+# Configure HAProxy to send traffic to web-01 and web-02
+cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg
+frontend http_front
+    bind *:80
+    mode http
+    default_backend http_back
+
+backend http_back
+    mode http
+    balance roundrobin
+    server web-01 [STUDENT_ID]-web-01:80 check
+    server web-02 [STUDENT_ID]-web-02:80 check
+EOF
+
+# Ensure HAProxy can be managed via an init script
+sudo systemctl enable haproxy
+
+# Restart HAProxy to apply the changes
+sudo systemctl restart haproxy
