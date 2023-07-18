@@ -46,10 +46,10 @@ frontend https
 backend web-servers
         balance roundrobin
         option forwardfor
-        server 207828-web-01 34.234.204.250:80 check
-        server 207828-web-02 54.197.49.59:80 check
+        server 207828-web-01 54.172.41.61:80 check
+        server 207828-web-02 100.24.235.85:80 check
 
 backend web-backend
         balance roundrobin
-        server 207828-web-01 34.234.204.250:80 check
-        server 207828-web-02 54.197.49.59:80 check
+        server 207828-web-01 54.172.41.61:80 check
+        server 207828-web-02 100.24.235.85:80 check
