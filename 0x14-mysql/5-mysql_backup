@@ -1,28 +1,5 @@
 #!/usr/bin/env bash
 # backup and compress my databases
 
-# Get the current date
-current_date=$(date +'%d-%m-%Y')
-
-# Set the backup file name
-backup_file="backup.sql"
-
-# Set the compressed archive name
-archive_name="$current_date.tar.gz"
-
-# MySQL database credentials
-mysql_user="root"
-mysql_password="$1"
-
-# Perform the MySQL dump
-mysqldump -u "$mysql_user" -p"$mysql_password" --all-databases > "$backup_file"
-
-# Create the compressed archive
-tar -czvf "$archive_name" "$backup_file"
-
-# Remove the MySQL dump file
-rm "$backup_file"
-
-# Provide feedback
-echo "MySQL dump and archive created successfully."
-echo "Archive name: $archive_name"
+mysqldump -uroot -p"$1" --all-databases > backup.sql
+tar -czvf $"(date + %d-%b-%Y).tar.gz" backup.sql
