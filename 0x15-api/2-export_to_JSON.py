@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """Python script to export data in the JSON format."""
 import json
-from urllib import request
 import requests
 import sys
+
 
 if __name__ == "__main__":
     u_id = sys.argv[1]
