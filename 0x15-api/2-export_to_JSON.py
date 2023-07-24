@@ -5,14 +5,14 @@ import requests
 import sys
 
 if __name__ == "__main__":
-    user_id = sys.argv[1]
+    u_id = sys.argv[1]
     api_url = "https://jsonplaceholder.typicode.com/"
-    user = requests.get(api_url + "users/{}".format(user_id)).json()
+    user = requests.get(api_url + "users/{}".format(u_id)).json()
     username = user.get("username")
-    todos = requests.get(api_url + "todos", params={"userId": user_id}).json()
+    todos = requests.get(api_url + "todos", params={"userId": u_id}).json()
 
-    with open("{}.json".format(user_id), "w") as jsonfile:
-        json.dump({user_id: [{
+    with open("{}.json".format(u_id), "w") as jsonfile:
+        json.dump({u_id: [{
                 "task": t.get("title"),
                 "completed": t.get("completed"),
                 "username": username
