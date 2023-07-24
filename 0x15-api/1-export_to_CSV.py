@@ -8,10 +8,10 @@ import sys
 
 if __name__ == "__main__":
     u_id = sys.argv[1]
-    api_url = "https://jsonplaceholder.typicode.com/"
-    user = requests.get(api_url + "users/{}".format(u_id)).json()
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(u_id)).json()
     username = user.get("username")
-    todos = requests.get(api_url + "todos", params={"userId": u_id}).json()
+    todos = requests.get(url + "todos", params={"userId": u_id}).json()
 
     with open("{}.csv".format(u_id), "w", newline="") as csvfile:
         writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
