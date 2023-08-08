@@ -7,33 +7,22 @@ import requests
 
 def recurse(subreddit, hot_list=[], after="", count=0):
     """Returns a list of titles of all hot posts on a given subreddit."""
-    if hot_list is None:
-        hot_list = []
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=100"
-    headers = {
-        'User-Agent': 'CustomUserAgent'
-    }
-    if after:
-        url += f'&after={after}'
-
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if response.status_code == 200:
-        data = response.json()
-        posts = data['data']['children']
-
-        for post in posts:
-            title = post['data']['title']
-            hot_list.append(title)
-
-        after = data['data']['after']
-        if after:
-            recurse(subreddit, hot_list, after)
-        else:
-            return hot_list
-    elif response.status_code == 404:
-        print(f"Subreddit '{subreddit}' not found.")
+    sub_info = requests.get("https://www.reddit.com/r/{}/hot.json"
+                            .format(subreddit),
+                            params={"count": count, "after": after},
+                            headers={"User-Agent": "My-User-Agent"},
+                            allow_redirects=False)
+    if sub_info.status_code >= 400:
         return None
-    else:
-        print(f"Error fetching data for subreddit
-                '{subreddit}': {response.status_code}")
-        return None
+
+    hot_l = hot_list + [child.get("data").get("title")
+                        for child in sub_info.json()
+                        .get("data")
+                        .get("children")]
+
+    info = sub_info.json()
+    if not info.get("data").get("after"):
+        return hot_l
+
+    return recurse(subreddit, hot_l, info.get("data").get("count"),
+                   info.get("data").get("after"))       
