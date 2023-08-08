@@ -15,17 +15,16 @@ def recurse(subreddit, hot_list=[], after="", count=0):
     }
     if after:
         url += f'&after={after}'
-    
+
     response = requests.get(url, headers=headers, allow_redirects=False)
-    
     if response.status_code == 200:
         data = response.json()
         posts = data['data']['children']
-        
+
         for post in posts:
             title = post['data']['title']
             hot_list.append(title)
-        
+
         after = data['data']['after']
         if after:
             recurse(subreddit, hot_list, after)
@@ -35,5 +34,6 @@ def recurse(subreddit, hot_list=[], after="", count=0):
         print(f"Subreddit '{subreddit}' not found.")
         return None
     else:
-        print(f"Error fetching data for subreddit '{subreddit}': {response.status_code}")
+        print(f"Error fetching data for subreddit '{subreddit}':
+                {response.status_code}")
         return None
