@@ -34,6 +34,6 @@ def recurse(subreddit, hot_list=[], after="", count=0):
         print(f"Subreddit '{subreddit}' not found.")
         return None
     else:
-        print(f"Error fetching data for subreddit '{subreddit}':
-                {response.status_code}")
+        print(f"Error fetching data for subreddit
+                '{subreddit}': {response.status_code}")
         return None
