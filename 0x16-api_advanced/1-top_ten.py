@@ -5,21 +5,12 @@ import requests
 
 def top_ten(subreddit):
     """Print the titles of the 10 hottest posts on a given subreddit."""
-    uurl = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
-    headers = {
-        'User-Agent': 'CustomUserAgent'
-    }
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if response.status_code == 200:
-        data = response.json()
-        posts = data['data']['children']
-        
-        print(f"Top 10 Hot Posts in r/{subreddit}:")
-        for post in posts:
-            title = post['data']['title']
-            print(title)
-    elif response.status_code == 404:
-        print(f"Subreddit '{subreddit}' not found.")
+   sub_info = requests.get("https://www.reddit.com/r/{}/hot.json?limit=10"
+                            .format(subreddit),
+                            headers={"User-Agent": "My-User-Agent"},
+                            allow_redirects=False)
+    if sub_info.status_code >= 300:
+        print('None')
     else:
-        print(f"Error fetching data for subreddit '{subreddit}':
-              {response.status_code}")
+        [print(child.get("data").get("title"))
+         for child in sub_info.json().get("data").get("children")]
